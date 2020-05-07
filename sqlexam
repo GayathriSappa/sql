@@ -7,7 +7,37 @@ Q3 ="select min(rank) from movie where year =1991;"
 Q4 ="select fname,lname from actor left outer join cast on actor.id =pid where mid =27;"    													
 
 Q5 ="select count(mid) from cast  left outer join actor on actor.id =pid where fname ='Jon' and lname ='Dough';"
-
+ 
 Q6 ="select name from movie where movie.name Like 'Young Latin Girls%' and year Between 2003  and 2006;"
 
+Q7 ="SELECT DISTINCT fname,lname FROM Director INNER JOIN MovieDirector on Director.id=did INNER JOIN Movie on Movie.id=mid WHERE name LIKE 'Star Trek%';"
+
+Q8 =''' Select name from movie 
+          inner join actor on `actor`.id = `cast`.pid
+          Inner Join Cast  on `movie`.id = `cast`.mid
+          inner join moviedirector on `moviedirector`.mid= movie.id 
+          inner join director on `director`.id = `moviedirector` .did 
+          where `actor`.fname= 'Jackie (I)' and `actor`.lname ='Chan' and 
+          `director`.fname= 'Jackie (I)' and `director`.lname='Chan';''' 																 							
+
+Q9 ="SELECT fname,lname FROM Director INNER JOIN MovieDIRECTOR on Director.id=did INNER join Movie ON Movie.id=mid WHERE year = 2001 GROUP BY did HAVING COUNT(mid)>=4 ORDER BY fname ASC,lname DESC;"
+
 Q10 ="select gender,count(gender) from actor group by gender order by gender asc;"
+                  
+Q11 ="select distinct a.name,b.name,a.rank,a.year from movie as a inner join movie as b  on a.rank=b.rank and a.year = b.year where a.id > b.id order by a.name asc limit 100;"       
+
+Q12 ='''select `actor`.fname ,`movie`.year, rank from actor 
+         inner join Cast on `actor`.id = `cast`.pid
+         Inner Join movie  on `movie`.id = `cast`.mid
+         order by `actor`.fname asc, `movie`.year desc limit 100;'''
+         
+Q13 ='''select `Actor`.fname,`Director`.fname, avg(rank) as score from movie 
+        inner join Cast on `movie`.id = `cast`.mid
+        inner join moviedirector on `moviedirector`.mid= movie.id 
+        inner join actor on `actor`.id = `cast`.pid
+        inner join director on `director`.id = `moviedirector` .did 
+        GROUP BY `director`.id,`Actor`.id    
+        HAVING COUNT(*) >= 5
+        ORDER BY score DESC, `Director`.fname ASC, `Actor`.fname DESC
+         LIMIT 100; 
+        '''
