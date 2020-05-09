@@ -1,0 +1,43 @@
+Q1 = "select avg(age) from player;"
+
+Q2 = "select match_no,play_date from Match where audience > 50000 order by play_date asc;"
+
+Q3 ="select team_id, count(match_no)  as cnt from matchteamdetails where win_lose ='W' group by team_id order by count(match_no) desc, team_id asc;"
+
+Q4 = "select match_no,play_date from match where stop1_sec > (select avg(stop1_sec) from match) order by match_no desc;"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+Q5='''SELECT `MATCHCAPTAIN`.MATCH_NO,`TEAM`.NAME,`PLAYER`.NAME FROM TEAM INNER JOIN MATCHCAPTAIN ON `TEAM`.TEAM_ID=`MATCHCAPTAIN`.TEAM_ID INNER JOIN PLAYER ON `MATCHCAPTAIN`.CAPTAIN=`PLAYER`.PLAYER_ID ORDER BY `MATCHCAPTAIN`.MATCH_NO,`TEAM`.NAME ASC;'''
+	
+Q6= """select match_no,name,jersey_no 
+	from match 
+	inner join player on player_of_match = player_id 
+	order by match_no;"""
+
+Q7='''SELECT `TEAM`.NAME,AVG(AGE) AS AVG_AGE FROM TEAM INNER JOIN PLAYER ON `TEAM`.TEAM_ID=`PLAYER`.TEAM_ID GROUP BY `TEAM`.NAME HAVING AVG(AGE)>26 ORDER BY `TEAM`.NAME;'''
+	
+Q8='''SELECT `PLAYER`.NAME,JERSEY_NO,AGE,COUNT(GOAL_ID) AS NUMBER_OF_GOALS FROM PLAYER INNER JOIN GOALDETAILS ON `PLAYER`.PLAYER_ID=`GOALDETAILS`.PLAYER_ID WHERE AGE<=27 GROUP BY `GOALDETAILS`.PLAYER_ID ORDER BY NUMBER_OF_GOALS DESC,`PLAYER`.NAME ASC;'''
+	
+#Q9='''SELECT `TEAM`.TEAM_ID,(COUNT(GOAL_ID)*100/(SELECT COUNT(GOAL_ID) FROM GOALDETAILS)) FROM TEAM INNER JOIN GOALDETAILS ON `TEAM`.TEAM_ID=`GOALDETAILS`.TEAM_ID GROUP BY `GOALDETAILS`.TEAM_ID;'''
+
+Q9 = '''SELECT team_id, COUNT(goal_id)*100.0/(SELECT COUNT(goal_id) FROM GoalDetails)
+        FROM GoalDetails
+        GROUP BY team_id
+        HAVING COUNT(goal_id) != 0;'''
+        
+Q10='''SELECT AVG(NUMBER_OF_GOALS) FROM (SELECT COUNT(GOAL_ID) AS NUMBER_OF_GOALS FROM GOALDETAILS GROUP BY TEAM_ID);'''
+	
+Q11='''select player.player_id,player.name,player.date_of_birth from player 
+       where Not Exists(
+       select goal_id from goaldetails where player.player_id = goaldetails.player_id)
+       order by player_id asc;'''
+       
+       
+
+Q12 ='''SELECT `T`.name, `M`.match_no, audience AS audience, audience - 
+        (SELECT AVG(audience) FROM Match JOIN MatchTeamDetails ON 
+        `Match`.match_no = `MatchTeamDetails`.match_no AND T.team_id = `MatchTeamDetails`.team_id)
+         FROM MatchTeamDetails JOIN Match AS M ON `MatchTeamDetails`.match_no = `M`.match_no
+         JOIN Team AS T ON `MatchTeamDetails`.team_id = `T`.team_id
+         ORDER BY `M`.match_no ASC;'''
+
+
